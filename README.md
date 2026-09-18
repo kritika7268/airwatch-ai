@@ -2,6 +2,13 @@
 ### Hyperlocal Air Pollution Detection & Civic Action Platform for Indian Cities
 *Submission for Google AI Hackathon — Clean Air & Climate Resilience Track*
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-AirWatch_AI-00C853?style=for-the-badge&logo=render&logoColor=white)](https://airwatch-ai-992k.onrender.com/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/kritika7268/airwatch-ai)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://airwatch-ai-992k.onrender.com/api)
+
+> 🔗 **Live Web Application**: **[https://airwatch-ai-992k.onrender.com](https://airwatch-ai-992k.onrender.com/)**  
+> 📡 **Live API & Health**: **[https://airwatch-ai-992k.onrender.com/api](https://airwatch-ai-992k.onrender.com/api)**
+
 ---
 
 ## 🌟 Overview
