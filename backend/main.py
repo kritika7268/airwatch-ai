@@ -10,6 +10,8 @@ import copy
 from typing import Dict, List, Any, Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from seed_data import CITIES_DATA, INITIAL_ALERTS
@@ -104,8 +106,9 @@ def get_or_default_city(city: Optional[str]) -> str:
 # ============================================================================
 # ROOT & STATUS ENDPOINTS
 # ============================================================================
-@app.get("/")
-def read_root():
+@app.get("/api")
+@app.get("/api/health")
+def read_api_health():
     return {
         "app": "AirWatch AI",
         "tagline": "Hyperlocal Air Pollution Detection and Alert Platform for Indian Cities",
@@ -402,3 +405,36 @@ def reset_demo_state():
         "success": True,
         "message": "Demo data successfully reset to baseline seed values."
     }
+
+
+# ============================================================================
+# 7. FRONTEND STATIC ASSETS SERVING (FOR PRODUCTION / CLOUD DEPLOYMENT)
+# ============================================================================
+frontend_dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+assets_dir = os.path.join(frontend_dist_dir, "assets")
+
+if os.path.exists(assets_dir):
+    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+if os.path.exists(frontend_dist_dir):
+    @app.get("/")
+    async def serve_frontend_root():
+        return FileResponse(os.path.join(frontend_dist_dir, "index.html"))
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend_catchall(full_path: str):
+        target_file = os.path.join(frontend_dist_dir, full_path)
+        if os.path.isfile(target_file):
+            return FileResponse(target_file)
+        return FileResponse(os.path.join(frontend_dist_dir, "index.html"))
+else:
+    @app.get("/")
+    def read_root():
+        return read_api_health()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+
